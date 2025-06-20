@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thamer Aljehani | Interactive Resume</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Professional Calm -->
+    <!-- Application Structure Plan: A single-page application with a top navigation bar for smooth scrolling to thematic sections: Summary, Experience (interactive timeline), Skills (visualized with a bar chart), and Education. This structure transforms the linear CV into an engaging, explorable portfolio, allowing recruiters to quickly access the most relevant information. -->
+    <!-- Visualization & Content Choices: Summary: Inform -> Text Block -> Static -> Clear intro. Experience: Change -> Interactive Timeline -> JS Toggle Details -> Shows career path without initial clutter. Skills: Organize/Compare -> Grouped Lists & Bar Chart -> JS/Chart.js -> Quantifies skill areas without inventing proficiency data. Education: Inform -> Styled Cards -> Static -> Clean presentation of qualifications. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4;
+            color: #3D405B;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 380px;
+            }
+        }
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #81B29A;
+        }
+        .timeline-item-content {
+            transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+        }
+        .timeline-item.open .timeline-item-content {
+            max-height: 500px;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header id="home" class="p-4 sm:p-6 sticky top-0 z-50 bg-[#F8F7F4]/80 backdrop-blur-sm">
+        <nav class="container mx-auto flex justify-between items-center">
+            <a href="#home" class="text-xl sm:text-2xl font-bold text-[#3D405B]">Thamer Aljehani</a>
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="#summary" class="nav-link font-medium">Summary</a>
+                <a href="#experience" class="nav-link font-medium">Experience</a>
+                <a href="#skills" class="nav-link font-medium">Skills</a>
+                <a href="#education" class="nav-link font-medium">Education</a>
+            </div>
+            <a href="mailto:thamerf.aljohany@gmail.com" class="hidden sm:inline-block bg-[#81B29A] text-white font-bold py-2 px-4 rounded-lg hover:bg-[#6a947e] transition-colors duration-300">Contact Me</a>
+            <div class="md:hidden">
+                <button id="menu-btn" class="text-3xl">☰</button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden mt-4 flex flex-col items-center space-y-4">
+            <a href="#summary" class="nav-link font-medium">Summary</a>
+            <a href="#experience" class="nav-link font-medium">Experience</a>
+            <a href="#skills" class="nav-link font-medium">Skills</a>
+            <a href="#education" class="nav-link font-medium">Education</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <section id="hero" class="text-center py-16 md:py-24">
+            <h1 class="text-4xl md:text-6xl font-bold tracking-tight text-[#3D405B] mb-4">Thamer Aljehani</h1>
+            <p class="text-lg md:text-xl text-[#6B7280] max-w-2xl mx-auto">
+                Information Technology Graduate with a passion for Software Engineering and Cybersecurity.
+            </p>
+            <div class="mt-8 flex justify-center items-center space-x-4">
+                 <a href="mailto:thamerf.aljohany@gmail.com" class="text-sm text-gray-600 hover:text-[#3D405B]">thamerf.aljohany@gmail.com</a>
+                 <span class="text-gray-400">|</span>
+                 <a href="https://www.linkedin.com/in/thamer-fayz-aljehani/" target="_blank" rel="noopener noreferrer" class="text-sm text-gray-600 hover:text-[#3D405B]">linkedin.com/in/thamer-fayz-aljehani/</a>
+                 <span class="text-gray-400">|</span>
+                 <p class="text-sm text-gray-600">+966 540 342 451</p>
+            </div>
+        </section>
+
+        <section id="summary" class="py-12 md:py-20 bg-white rounded-2xl shadow-sm">
+            <div class="max-w-4xl mx-auto px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-center mb-8 text-[#3D405B]">Professional Summary</h2>
+                <p class="text-center text-lg text-gray-700 leading-relaxed">
+                    A highly motivated Bachelor of Information Technology graduate with a minor in Software Engineering from King AbdulAziz University, certified in Network Programming. Possesses strong skills in software development, cybersecurity, and problem-solving. A proactive and detail-oriented individual with excellent communication and teamwork abilities. Eager to contribute to innovative tech and security projects as a recent graduate, committed to continuous learning and professional growth.
+                </p>
+            </div>
+        </section>
+
+        <section id="experience" class="py-12 md:py-20">
+            <div class="max-w-4xl mx-auto px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-center mb-12 text-[#3D405B]">Experience</h2>
+                <div class="relative border-l-2 border-[#E07A5F]/50 ml-6">
+                    
+                    <div class="mb-10 ml-10 timeline-item open">
+                        <span class="absolute flex items-center justify-center w-8 h-8 bg-[#E07A5F] rounded-full -left-4 ring-8 ring-white">
+                            <span class="text-white font-bold">1</span>
+                        </span>
+                        <div class="p-6 bg-white rounded-lg shadow-md cursor-pointer timeline-item-header">
+                            <h3 class="text-xl font-semibold text-[#3D405B]">Information Technology Intern</h3>
+                            <p class="text-md font-medium text-gray-500 mb-1">SITA | Saudi Arabia</p>
+                            <time class="block text-sm font-normal leading-none text-gray-400">June - August 2024</time>
+                            <p class="text-sm mt-2 text-[#81B29A] font-medium">Click to see details ▼</p>
+                        </div>
+                        <div class="mt-4 ml-4 timeline-item-content">
+                            <ul class="list-disc list-inside text-gray-600 space-y-2">
+                                <li>Assisted with troubleshooting and resolving technical issues across hardware and software platforms.</li>
+                                <li>Supported the deployment and maintenance of IT infrastructure, including servers and networks.</li>
+                                <li>Collaborated with team members on IT projects and system upgrades.</li>
+                                <li>Documented technical processes and updated system documentation.</li>
+                                <li>Provided user support and training to enhance operational efficiency.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-center mt-8 text-gray-500">This section showcases my professional journey. Clicking on an entry reveals the key responsibilities and achievements in that role, providing deeper insight into my contributions.</p>
+            </div>
+        </section>
+
+        <section id="skills" class="py-12 md:py-20 bg-white rounded-2xl shadow-sm">
+            <div class="max-w-6xl mx-auto px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-center mb-4 text-[#3D405B]">Skills Overview</h2>
+                <p class="text-center text-lg text-gray-600 mb-12 max-w-3xl mx-auto">This section provides a visual and categorized breakdown of my technical and personal skills. The chart illustrates the distribution of my hard skills, while the lists below provide specific details. This approach offers a quick glance at my capabilities while allowing for a deeper dive into individual areas of expertise.</p>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <div class="chart-container">
+                            <canvas id="skillsChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="space-y-8">
+                        <div>
+                            <h3 class="text-xl font-bold mb-4 text-[#3D405B]">Hard Skills</h3>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="bg-[#E07A5F]/20 text-[#3D405B] px-4 py-2 rounded-full font-medium">Cybersecurity Basics</span>
+                                <span class="bg-[#E07A5F]/20 text-[#3D405B] px-4 py-2 rounded-full font-medium">Network Security</span>
+                                <span class="bg-[#E07A5F]/20 text-[#3D405B] px-4 py-2 rounded-full font-medium">Cloud Computing</span>
+                                <span class="bg-[#E07A5F]/20 text-[#3D405B] px-4 py-2 rounded-full font-medium">Technical Support</span>
+                                <span class="bg-[#E07A5F]/20 text-[#3D405B] px-4 py-2 rounded-full font-medium">Technology Services</span>
+                                <span class="bg-[#E07A5F]/20 text-[#3D405B] px-4 py-2 rounded-full font-medium">Computer Information Systems</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-4 text-[#3D405B]">Soft Skills</h3>
+                            <div class="flex flex-wrap gap-3">
+                                <span class="bg-[#81B29A]/20 text-[#3D405B] px-4 py-2 rounded-full font-medium">Communication</span>
+                                <span class="bg-[#81B29A]/20 text-[#3D405B] px-4 py-2 rounded-full font-medium">Problem-Solving</span>
+                                <span class="bg-[#81B29A]/20 text-[#3D405B] px-4 py-2 rounded-full font-medium">Leadership</span>
+                                <span class="bg-[#81B29A]/20 text-[#3D405B] px-4 py-2 rounded-full font-medium">Time Management</span>
+                                <span class="bg-[#81B29A]/20 text-[#3D405B] px-4 py-2 rounded-full font-medium">Attention to Detail</span>
+                                <span class="bg-[#81B29A]/20 text-[#3D405B] px-4 py-2 rounded-full font-medium">Collaboration & Teamwork</span>
+                                <span class="bg-[#81B29A]/20 text-[#3D405B] px-4 py-2 rounded-full font-medium">Flexibility</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="education" class="py-12 md:py-20">
+            <div class="max-w-4xl mx-auto px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-center mb-12 text-[#3D405B]">Education & Certifications</h2>
+                 <p class="text-center text-lg text-gray-600 mb-12 max-w-3xl mx-auto">My academic foundation and commitment to ongoing learning are highlighted here. This section details my formal degree and specialized certifications that underpin my technical expertise.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-200/50">
+                        <h3 class="text-xl font-bold text-[#3D405B] mb-2">Bachelor's in Information Technology</h3>
+                        <p class="font-medium text-gray-600">King AbdulAziz University | Saudi Arabia</p>
+                        <p class="text-gray-500 mt-1">Minor: Software Engineering</p>
+                        <p class="mt-4 text-sm font-semibold text-[#81B29A]">Graduated: May 2025</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-200/50">
+                        <h3 class="text-xl font-bold text-[#3D405B] mb-2">Network Programming</h3>
+                        <p class="font-medium text-gray-600">Satr Platform</p>
+                        <p class="text-gray-500 mt-1">Certification</p>
+                        <p class="mt-4 text-sm font-semibold text-[#81B29A]">Completed: July 2023</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white mt-16">
+        <div class="container mx-auto py-8 px-6 text-center text-gray-600">
+            <p>&copy; 2025 Thamer Aljehani. All Rights Reserved.</p>
+            <p class="text-sm mt-2">This interactive resume was built to showcase my profile in a modern, engaging way.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            menuBtn.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const skillsChartCtx = document.getElementById('skillsChart').getContext('2d');
+            const skillsData = {
+                labels: ['Security', 'IT Operations', 'Development'],
+                datasets: [{
+                    label: 'Number of Hard Skills by Category',
+                    data: [2, 3, 1],
+                    backgroundColor: [
+                        'rgba(224, 122, 95, 0.6)',
+                        'rgba(129, 178, 154, 0.6)',
+                        'rgba(61, 64, 91, 0.6)',
+                    ],
+                    borderColor: [
+                        '#E07A5F',
+                        '#81B29A',
+                        '#3D405B',
+                    ],
+                    borderWidth: 2
+                }]
+            };
+
+            new Chart(skillsChartCtx, {
+                type: 'bar',
+                data: skillsData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                color: '#3D405B'
+                            },
+                            grid: {
+                                color: '#F8F7F4'
+                            }
+                        },
+                        y: {
+                             ticks: {
+                                color: '#3D405B',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Hard Skills Distribution',
+                            color: '#3D405B',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#3D405B',
+                            titleColor: '#FFFFFF',
+                            bodyColor: '#FFFFFF',
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += context.parsed.x + ' skills';
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            document.querySelectorAll('.timeline-item-header').forEach(header => {
+                header.addEventListener('click', () => {
+                    header.parentElement.classList.toggle('open');
+                });
+            });
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                     if (mobileMenu.classList.contains('hidden') === false) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
